@@ -13,7 +13,11 @@
     <header>
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-brand mb-0 h1" style="font-weight: bold;">MyCodeBlog</span>
+            <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
             <a href="/newpost" class="btn btn-primary" role="button">Novo Post</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Sign Out"/>
+            </form>
         </nav>
     </header>
 
