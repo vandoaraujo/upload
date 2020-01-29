@@ -1,5 +1,6 @@
 package com.spring.upload.controller;
 
+import com.spring.upload.model.Demanda;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
@@ -19,7 +20,10 @@ public class ExcelLeitura {
 	static List<Row> linhasCanceladas = new ArrayList();
 
 	public static void main(String[] args) throws IOException, InvalidFormatException {
+		extrairDados();
+	}
 
+	public static List<Demanda> extrairDados() throws IOException, InvalidFormatException {
 		Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
 		String data = "1/16/20";
 		String hora = "07:00 X 16:00";
@@ -67,6 +71,11 @@ public class ExcelLeitura {
 
 		// Closing the workbook
 		workbook.close();
+		List<Demanda> demandas = new ArrayList();
+		Demanda demanda = new Demanda();
+		demanda.setTitulo("TESTE SPRING BOOT");
+		demandas.add(demanda);
+		return demandas;
 	}
 
 	private static void montaLayoutDemandasNaoAutorizadasCanceladas(List<String> colunas) {

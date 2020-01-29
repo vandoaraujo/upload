@@ -1,7 +1,9 @@
 package com.spring.upload.controller;
 
+import com.spring.upload.model.Demanda;
 import com.spring.upload.model.UploadPlanilha;
 import com.spring.upload.service.ExcellService;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class ExcelController {
@@ -26,8 +30,16 @@ public class ExcelController {
     @RequestMapping(value="/resultado", method= RequestMethod.GET)
     public ModelAndView getPosts(){
         ModelAndView mv = new ModelAndView("resultado");
-        String resultadoFinal = new String();
-        mv.addObject("resultado", resultadoFinal);
+        List<Demanda> demandas = null;
+        try {
+            demandas = excellService.extrairDados("1/16/2020");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        }
+        System.out.println(demandas.get(0).getTitulo());
+        mv.addObject("demandas", demandas);
         return mv;
     }
 
