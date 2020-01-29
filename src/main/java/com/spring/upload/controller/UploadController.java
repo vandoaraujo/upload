@@ -1,7 +1,6 @@
 package com.spring.upload.controller;
 
 import com.spring.upload.model.Upload;
-import com.spring.upload.repository.UploadRepository;
 import com.spring.upload.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
