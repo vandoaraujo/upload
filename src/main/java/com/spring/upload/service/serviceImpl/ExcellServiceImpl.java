@@ -2,6 +2,7 @@ package com.spring.upload.service.serviceImpl;
 
 import com.spring.upload.controller.ExcelLeitura;
 import com.spring.upload.model.Demanda;
+import com.spring.upload.model.HeaderSaida;
 import com.spring.upload.service.ExcellService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class ExcellServiceImpl implements ExcellService {
 
 
     @Override
-    public List<Demanda> extrairDados(String data) throws IOException, InvalidFormatException {
+    public HeaderSaida extrairDados(String data) throws IOException, InvalidFormatException {
         return ExcelLeitura.extrairDados();
     }
 }

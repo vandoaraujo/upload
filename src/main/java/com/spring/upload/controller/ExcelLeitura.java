@@ -1,6 +1,7 @@
 package com.spring.upload.controller;
 
 import com.spring.upload.model.Demanda;
+import com.spring.upload.model.HeaderSaida;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
@@ -23,7 +24,9 @@ public class ExcelLeitura {
 		extrairDados();
 	}
 
-	public static List<Demanda> extrairDados() throws IOException, InvalidFormatException {
+	public static HeaderSaida extrairDados() throws IOException, InvalidFormatException {
+
+		HeaderSaida saida = new HeaderSaida();
 		Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
 		String data = "1/16/20";
 		String hora = "07:00 X 16:00";
@@ -68,24 +71,33 @@ public class ExcelLeitura {
 
 		List<Demanda> demandas = formataSaidaDemandasRealizadas(data, hora,  colunas);
 		List<Demanda> demandasNaoAutorizadas =  montaLayoutDemandasNaoAutorizadasCanceladas(colunas);
-		demandas.addAll(demandasNaoAutorizadas);
 
-		// Closing the workbook
+		saida.setTitulo("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
+		saida.setResumo("*RESUMO DIÁRIO DO ATENDIMENTO -" + data);
+		saida.setHora(hora);
+		saida.setAprovadas(demandas);
+		saida.setCanceladas(demandasNaoAutorizadas);
+
 		workbook.close();
-		return demandas;
+		return saida;
 	}
 
 	private static List<Demanda> montaLayoutDemandasNaoAutorizadasCanceladas(List<String> colunas) {
 		List<Demanda> demandasNaoAutorizadas = new ArrayList();
-		System.out.println("SERVIÇOS NÃO AUTORIZADOS OU CANCELADOS");
+		/*System.out.println("SERVIÇOS NÃO AUTORIZADOS OU CANCELADOS");*/
 		for (Map row : valorContidoEmUmaLinhaCancelados) {
 			Demanda demandaNA = new Demanda();
 			demandaNA.setTitulo("SETD ");
-			imprimeValores(colunas, "Subestação DTR-SE", row, demandaNA.getTitulo());
-			imprimeValores(colunas, "PO", row, demandaNA.getTitulo());
-			imprimeValores(colunas, "Causa/Serviço", row, demandaNA.getTitulo());
-			System.out.println();
-			System.out.println("Status: ");
+
+			Optional<String> titulo = imprimeValores(colunas, "Subestação DTR-SE", row);
+			demandaNA.setTitulo(demandaNA.getTitulo().concat(String.valueOf(titulo.get())).concat(" "));
+
+			Optional<String> po =  imprimeValores(colunas, "PO", row);
+			demandaNA.setTitulo(demandaNA.getTitulo().concat(String.valueOf(po.get())).concat(" "));
+
+			Optional<String> causa = imprimeValores(colunas, "Causa/Serviço", row);
+			demandaNA.setTitulo(demandaNA.getTitulo().concat(String.valueOf(causa.get())).concat(" "));
+			demandaNA.setStatus("Status: ");
 			demandasNaoAutorizadas.add(demandaNA);
 		}
 		return demandasNaoAutorizadas;
@@ -99,67 +111,68 @@ public class ExcelLeitura {
 
 		List<Demanda> demandas = new ArrayList();
 
-		System.out.println("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
-		System.out.print("*RESUMO DIÁRIO DO ATENDIMENTO - ");
-		System.out.println(data + "*");
-		System.out.println("EQUIPE " + hora);
-		System.out.println();
-		System.out.println();
-
 		for (Map row : valorContidoEmUmaLinha) {
 			Demanda demanda = new Demanda();
 			demanda.setTitulo("SETD ");
-			imprimeValores(colunas, "Subestação DTR-SE", row, demanda.getTitulo());
+			Optional<String> titulo = imprimeValores(colunas, "Subestação DTR-SE", row);
+			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(titulo.get())).concat(" "));
 
-			imprimeValores(colunas, "Equipamento", row, demanda.getTitulo());
-			imprimeValores(colunas, "Tipo de Equipamento", row, demanda.getTitulo());
-			imprimeValores(colunas, "PO", row, demanda.getTitulo());
-			imprimeValores(colunas, "Causa/Serviço", row, demanda.getTitulo());
-			System.out.println();
+			Optional<String> tituloEq = imprimeValores(colunas, "Equipamento", row);
+			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(tituloEq.get())).concat(" "));
+
+			Optional<String> tipoEq = imprimeValores(colunas, "Tipo de Equipamento", row);
+			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(tipoEq.get())).concat(" "));
+
+			Optional<String> po = imprimeValores(colunas, "PO", row);
+			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(po.get())).concat(" "));
+
+			Optional<String> causaServico = imprimeValores(colunas, "Causa/Serviço", row);
+			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(causaServico.get())));
+
 			demanda.setEquipe("Equipe: ");
 			String valor = buscaColaborador(colunas, "Colaborador 1 - DTR-SE", row);
-			System.out.print(valor);
+			demanda.setEquipe(demanda.getEquipe().concat(valor));
+
 			String colaborador2 = buscaColaborador(colunas, "Colaborador 2 - DTR-SE", row);
 			if(colaborador2 != "") {
-				System.out.print(", " + colaborador2);
+				demanda.setEquipe(demanda.getEquipe().concat("," + colaborador2));
 			}
 			String colaborador3 = buscaColaborador(colunas, "Colaborador 3 - DTR-SE", row);
 			if(colaborador3 != "") {
-				System.out.print(", " + colaborador3);
+				demanda.setEquipe(demanda.getEquipe().concat("," + colaborador3));
 			}
 			String colaborador4 = buscaColaborador(colunas, "Colaborador 4 - DTR-SE", row);
 			if(colaborador4 != "") {
-				System.out.print(", " + colaborador4);
+				demanda.setEquipe(demanda.getEquipe().concat("," + colaborador4));
 			}
 			String colaborador5 = buscaColaborador(colunas, "Observação Pós Programação", row);
 			if(colaborador5 != "") {
-				System.out.print(", " + colaborador5);
+				demanda.setEquipe(demanda.getEquipe().concat("," + colaborador5));
 			}
-			System.out.println();
+
 			demanda.setViatura("Viatura: ");
-			imprimeValores(colunas, "Viatura 1 - DTR-SE", row, demanda.getViatura());
-			System.out.println();
+			Optional<String> viatura = imprimeValores(colunas, "Viatura 1 - DTR-SE", row);
+			demanda.setViatura(demanda.getViatura().concat(String.valueOf(viatura.get())));
 			demanda.setHorarioSaida("Horário de Saída: ");
 			demanda.setStatus("Status: ");
 			demanda.setJustificativa("Justificativa: ");
-			System.out.println();
 			demandas.add(demanda);
 		}
 		return demandas;
 	}
 
-	private static void imprimeValores(List<String> colunas, String coluna, Map row, String value ) {
+	private static Optional<String> imprimeValores(List<String> colunas, String coluna, Map row ) {
 		for (int i = 0; i < colunas.size(); i++) {
 			if (colunas.get(i).equals(coluna)) {
 					Set<String> valores = row.keySet();
 					for (String key : valores) {
 						if(key.equals(coluna)) {
-							value = value.concat((String) row.get(key) + " ");
-							break;
+							return Optional.ofNullable((String) row.get(key));
 						}
 					}
 			}
 		}
+		return Optional.empty();
 	}
 
 	private static String buscaColaborador(List<String> colunas, String coluna, Map row ) {

@@ -20,28 +20,51 @@
             </form>
         </nav>
     </header>
-
     <section>
+        <div class="container"  style="width: 60%; padding-bottom: 30px;">
+            <span th:text="${resultado.titulo}"></span>
+            <p></p>
+            <span th:text="${resultado.resumo}"></span>
+            <p></p>
+            EQUIPE: <span th:text="${resultado.hora}"></span>
+            <p></p>
+        </div>
     <div class="container"  style="width: 60%; padding-bottom: 30px;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" style="background-color: white; padding-left: 0px;">
-                <li class="breadcrumb-item active" aria-current="page">Dados</li>
-            </ol>
-        </nav>
-        <div class="card shadow-sm bg-white rounded" style="margin-top: 20px;" th:each="demanda : ${demandas}">
+        <div class="card shadow-sm bg-white rounded" style="margin-top: 20px;" th:each="demanda : ${resultado.aprovadas}">
             <div class="card-body">
-                <p class="card-subtitle mb-2 text-muted" style="font-size: 0.8rem;">
                     <span th:text="${demanda.titulo}"></span>
+                    <p></p>
                     <span th:text="${demanda.equipe}"></span>
+                    <p></p>
                     <span th:text="${demanda.viatura}"></span>
+                    <p></p>
                     <span th:text="${demanda.horarioSaida}"></span>
+                    <p></p>
                     <span th:text="${demanda.status}"></span>
+                    <p></p>
                     <span th:text="${demanda.justificativa}"></span>
-                </p>
-<!--                <a th:href="${(#mvc.url('BC#getPostDetails').arg(0, post.id)).build()}"><h4 class="card-title" style="font-weight: bold; color: black; padding-top: 5px;"><span th:text="${post.titulo}"></span></h4></a>-->
-                <!--<p class="card-text"><span th:utext="${#strings.abbreviate(post.texto,400)} "></span></p>-->
-                <!--<a th:href="${(#mvc.url('BC#getPostDetails').arg(0, post.id)).build()}" class="card-link">Acessar</a>-->
+                    <p></p>
             </div>
+        </div>
+        <p></p>
+        <h3>SERVIÇOS NÃO AUTORIZADOS OU CANCELADOS</h3>
+
+        <div class="card shadow-sm bg-white rounded" style="margin-top: 20px;" th:each="demanda : ${resultado.canceladas}">
+            <div class="card-body">
+                <span th:text="${demanda.titulo}"></span>
+                <p></p>
+                <span th:text="${demanda.equipe}"></span>
+                <p></p>
+                <span th:text="${demanda.viatura}"></span>
+                <p></p>
+                <span th:text="${demanda.horarioSaida}"></span>
+                <p></p>
+                <span th:text="${demanda.status}"></span>
+                <p></p>
+                <span th:text="${demanda.justificativa}"></span>
+                <p></p>
+            </div>
+        </div>
         </div>
     </div>
     </section>
