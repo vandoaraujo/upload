@@ -25,6 +25,7 @@ public class ExcelLeitura {
 
 	static List<String> colunas = null;
 	static List<Map> valorContidoEmUmaLinha = new ArrayList<>();
+	static List<Map> valorContidoEmUmaLinhaCancelados = new ArrayList<>();
 	static List<Row> linhasCanceladas = new ArrayList();
 
 	public static void main(String[] args) throws IOException, InvalidFormatException {
@@ -42,8 +43,7 @@ public class ExcelLeitura {
 				colunas = builderHeader(linha);
 				primeiraLinha = false;
 			}
-			if (isDataEncontrada(data, linha) && isHoraEncontrada(hora, linha) && isRealizado(linha)) {
-				// Coluna -> Valor
+			if(isDataEncontrada(data, linha) && isCancelado(linha)){
 				Map<String, String> headerComValorCadaCelula = new HashMap<>();
 				Iterator<Cell> cellIterator = linha.cellIterator();
 				int indiceColuna = 0;
@@ -53,40 +53,62 @@ public class ExcelLeitura {
 					headerComValorCadaCelula.put(colunas.get(indiceColuna), cellValue);
 					indiceColuna++;
 				}
+				valorContidoEmUmaLinhaCancelados.add(headerComValorCadaCelula);
+			}
+			else if (isDataEncontrada(data, linha) && isHoraEncontrada(hora, linha)) {
+				// Coluna -> Valor
+				Map<String, String> headerComValorCadaCelula = new HashMap<>();
+				Iterator<Cell> cellIterator = linha.cellIterator();
+				int indiceColuna = 0;
+				while (cellIterator.hasNext()) {
+					Cell cell = cellIterator.next();
+					String cellValue = new DataFormatter().formatCellValue(cell);
+					headerComValorCadaCelula.put(colunas.get(indiceColuna), cellValue);
+					indiceColuna++;
+
+				}
 				valorContidoEmUmaLinha.add(headerComValorCadaCelula);
 				// buildRowSearched(row);
 			}
 		}
 
-		formataSaida(data, colunas);
+		formataSaidaDemandasRealizadas(data, hora,  colunas);
+		montaLayoutDemandasNaoAutorizadasCanceladas(colunas);
 
 		// Closing the workbook
 		workbook.close();
 	}
 
+	private static void montaLayoutDemandasNaoAutorizadasCanceladas(List<String> colunas) {
+		System.out.println("SERVIÇOS NÃO AUTORIZADOS OU CANCELADOS");
+		for (Map row : valorContidoEmUmaLinhaCancelados) {
+			System.out.print("SETD ");
+			imprimeValores(colunas, "Subestação DTR-SE", row);
+			imprimeValores(colunas, "PO", row);
+			imprimeValores(colunas, "Causa/Serviço", row);
+			System.out.println();
+			System.out.println("Status: ");
+		}
+	}
+
 	/**
-	 * *MANUTENÇÃO E OPERAÇÃO DTR-SE* *RESUMO DIÁRIO DO ATENDIMENTO - 16/01/2020*
-	 * EQUIPE 07:00 X 16:00
 	 *
-	 * SETD PER RELÉ Digital Modernização e testes do sistema de controle e proteção.
-	 * Equipe: NEANDER E GATTI
-	 * Viatura: 2047
-	 * Horário de saída: 08:30
-	 * Status: Justificativa: DDS
-	 * 
 	 * @param colunas
 	 */
-	private static void formataSaida(String data, List<String> colunas) {
-		System.out.println("MANUTENÇÃO E OPERAÇÃO DTR-SE");
-		System.out.print("RESUMO DIÁRIO DO ATENDIMENTO - ");
-		System.out.println(data);
-		System.out.println("EQUIPE 07:00 X 16:00");
+	private static void formataSaidaDemandasRealizadas(String data, String hora, List<String> colunas) {
+		System.out.println("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
+		System.out.print("*RESUMO DIÁRIO DO ATENDIMENTO - ");
+		System.out.println(data + "*");
+		System.out.println("EQUIPE " + hora);
+		System.out.println();
+		System.out.println();
 
 		for (Map row : valorContidoEmUmaLinha) {
 			System.out.print("SETD ");
 			imprimeValores(colunas, "Subestação DTR-SE", row);
 			imprimeValores(colunas, "Equipamento", row);
 			imprimeValores(colunas, "Tipo de Equipamento", row);
+			imprimeValores(colunas, "PO", row);
 			imprimeValores(colunas, "Causa/Serviço", row);
 			System.out.println();
 			System.out.print("Equipe: ");
@@ -109,7 +131,9 @@ public class ExcelLeitura {
 				System.out.print(", " + colaborador5);
 			}
 			System.out.println();
-			System.out.println("Viatura: ");
+			System.out.print("Viatura: ");
+			imprimeValores(colunas, "Viatura 1 - DTR-SE", row);
+			System.out.println();
 			System.out.println("Horário de Saída: ");
 			System.out.println("Status: ");
 			System.out.println("Justificativa: ");
@@ -185,20 +209,19 @@ public class ExcelLeitura {
 		return achou;
 	}
 
-	private static boolean isRealizado(Row row) {
+	private static boolean isCancelado(Row row) {
 		Iterator<Cell> cellIterator = row.cellIterator();
-		boolean realizado = false;
+		boolean cancelado = true;
 		while (cellIterator.hasNext()) {
 			Cell cell = cellIterator.next();
 			String cellValue = new DataFormatter().formatCellValue(cell);
 			if (!cellValue.equals("") && (cellValue.startsWith("Cancelado"))) {
-				linhasCanceladas.add(row);
-				realizado = false;
+				cancelado = true;
 				break;
 			}
-			realizado = true;
+			cancelado = false;
 		}
-		return realizado;
+		return cancelado;
 	}
 
 	private static void buildRowSearched(Row row) {
