@@ -38,7 +38,6 @@ public class ExcelController {
         } catch (InvalidFormatException e) {
             e.printStackTrace();
         }
-        System.out.println(demandas.get(0).getTitulo());
         mv.addObject("demandas", demandas);
         return mv;
     }

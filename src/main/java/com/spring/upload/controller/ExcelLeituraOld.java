@@ -11,7 +11,7 @@ import java.util.*;
 /**
  */
 
-public class ExcelLeitura {
+public class ExcelLeituraOld {
 	public static final String SAMPLE_XLSX_FILE_PATH = "./Programação2.xlsx";
 
 	static List<String> colunas = null;
@@ -66,39 +66,35 @@ public class ExcelLeitura {
 			}
 		}
 
-		List<Demanda> demandas = formataSaidaDemandasRealizadas(data, hora,  colunas);
-		List<Demanda> demandasNaoAutorizadas =  montaLayoutDemandasNaoAutorizadasCanceladas(colunas);
-		demandas.addAll(demandasNaoAutorizadas);
+		formataSaidaDemandasRealizadas(data, hora,  colunas);
+		montaLayoutDemandasNaoAutorizadasCanceladas(colunas);
 
 		// Closing the workbook
 		workbook.close();
+		List<Demanda> demandas = new ArrayList();
+		Demanda demanda = new Demanda();
+		demanda.setTitulo("TESTE SPRING BOOT");
+		demandas.add(demanda);
 		return demandas;
 	}
 
-	private static List<Demanda> montaLayoutDemandasNaoAutorizadasCanceladas(List<String> colunas) {
-		List<Demanda> demandasNaoAutorizadas = new ArrayList();
+	private static void montaLayoutDemandasNaoAutorizadasCanceladas(List<String> colunas) {
 		System.out.println("SERVIÇOS NÃO AUTORIZADOS OU CANCELADOS");
 		for (Map row : valorContidoEmUmaLinhaCancelados) {
-			Demanda demandaNA = new Demanda();
-			demandaNA.setTitulo("SETD ");
-			imprimeValores(colunas, "Subestação DTR-SE", row, demandaNA.getTitulo());
-			imprimeValores(colunas, "PO", row, demandaNA.getTitulo());
-			imprimeValores(colunas, "Causa/Serviço", row, demandaNA.getTitulo());
+			System.out.print("SETD ");
+			imprimeValores(colunas, "Subestação DTR-SE", row);
+			imprimeValores(colunas, "PO", row);
+			imprimeValores(colunas, "Causa/Serviço", row);
 			System.out.println();
 			System.out.println("Status: ");
-			demandasNaoAutorizadas.add(demandaNA);
 		}
-		return demandasNaoAutorizadas;
 	}
 
 	/**
 	 *
 	 * @param colunas
 	 */
-	private static List<Demanda> formataSaidaDemandasRealizadas(String data, String hora, List<String> colunas) {
-
-		List<Demanda> demandas = new ArrayList();
-
+	private static void formataSaidaDemandasRealizadas(String data, String hora, List<String> colunas) {
 		System.out.println("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
 		System.out.print("*RESUMO DIÁRIO DO ATENDIMENTO - ");
 		System.out.println(data + "*");
@@ -107,16 +103,14 @@ public class ExcelLeitura {
 		System.out.println();
 
 		for (Map row : valorContidoEmUmaLinha) {
-			Demanda demanda = new Demanda();
-			demanda.setTitulo("SETD ");
-			imprimeValores(colunas, "Subestação DTR-SE", row, demanda.getTitulo());
-
-			imprimeValores(colunas, "Equipamento", row, demanda.getTitulo());
-			imprimeValores(colunas, "Tipo de Equipamento", row, demanda.getTitulo());
-			imprimeValores(colunas, "PO", row, demanda.getTitulo());
-			imprimeValores(colunas, "Causa/Serviço", row, demanda.getTitulo());
+			System.out.print("SETD ");
+			imprimeValores(colunas, "Subestação DTR-SE", row);
+			imprimeValores(colunas, "Equipamento", row);
+			imprimeValores(colunas, "Tipo de Equipamento", row);
+			imprimeValores(colunas, "PO", row);
+			imprimeValores(colunas, "Causa/Serviço", row);
 			System.out.println();
-			demanda.setEquipe("Equipe: ");
+			System.out.print("Equipe: ");
 			String valor = buscaColaborador(colunas, "Colaborador 1 - DTR-SE", row);
 			System.out.print(valor);
 			String colaborador2 = buscaColaborador(colunas, "Colaborador 2 - DTR-SE", row);
@@ -136,25 +130,24 @@ public class ExcelLeitura {
 				System.out.print(", " + colaborador5);
 			}
 			System.out.println();
-			demanda.setViatura("Viatura: ");
-			imprimeValores(colunas, "Viatura 1 - DTR-SE", row, demanda.getViatura());
+			System.out.print("Viatura: ");
+			imprimeValores(colunas, "Viatura 1 - DTR-SE", row);
 			System.out.println();
-			demanda.setHorarioSaida("Horário de Saída: ");
-			demanda.setStatus("Status: ");
-			demanda.setJustificativa("Justificativa: ");
+			System.out.println("Horário de Saída: ");
+			System.out.println("Status: ");
+			System.out.println("Justificativa: ");
 			System.out.println();
-			demandas.add(demanda);
 		}
-		return demandas;
 	}
 
-	private static void imprimeValores(List<String> colunas, String coluna, Map row, String value ) {
+	private static void imprimeValores(List<String> colunas, String coluna, Map row ) {
 		for (int i = 0; i < colunas.size(); i++) {
 			if (colunas.get(i).equals(coluna)) {
 					Set<String> valores = row.keySet();
 					for (String key : valores) {
 						if(key.equals(coluna)) {
-							value = value.concat((String) row.get(key) + " ");
+							String value = (String) row.get(key);
+							System.out.print(value + " ");
 							break;
 						}
 					}
