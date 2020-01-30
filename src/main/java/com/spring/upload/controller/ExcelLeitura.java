@@ -13,7 +13,7 @@ import java.util.*;
  */
 
 public class ExcelLeitura {
-	public static final String SAMPLE_XLSX_FILE_PATH = "./Programação2.xlsx";
+	public static final String SAMPLE_XLSX_FILE_PATH = "/app/Programação2.xlsx";
 
 	static List<String> colunas = null;
 	static List<Map> valorContidoEmUmaLinha = new ArrayList<>();
