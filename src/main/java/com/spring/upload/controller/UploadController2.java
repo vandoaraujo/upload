@@ -16,15 +16,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-public class UploadController {
+public class UploadController2 {
 
     @Autowired
     UploadService uploadService;
-
-    @RequestMapping("/")
-    public String index(){
-        return "index";
-    }
+//
+//    @RequestMapping("/")
+//    public String index(){
+//        return "index";
+//    }
 
     @RequestMapping(value="/posts", method= RequestMethod.GET)
     public ModelAndView getPosts(){

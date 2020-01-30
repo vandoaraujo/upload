@@ -7,25 +7,23 @@ import java.time.LocalDate;
 
 public class UploadPlanilha {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate data;
+    private String data;
 
-    @Lob
-    private String texto;
+    private String planilha;
 
-    public String getTexto() {
-        return texto;
-    }
-
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
-
-    public LocalDate getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
+    public void setData(String data) {
         this.data = data;
+    }
+
+    public String getPlanilha() {
+        return planilha;
+    }
+
+    public void setPlanilha(String planilha) {
+        this.planilha = planilha;
     }
 }
