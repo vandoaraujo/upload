@@ -25,7 +25,7 @@ import java.util.List;
 public class ExcelController {
 
     //Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "/app/";
+    private static String UPLOADED_FOLDER = "";
 
     @Autowired
     ExcellService excellService;
@@ -48,7 +48,7 @@ public class ExcelController {
 
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Path path = Paths.get(file.getOriginalFilename());
             Files.write(path, bytes);
 
             redirectAttributes.addFlashAttribute("message",
