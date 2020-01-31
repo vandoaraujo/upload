@@ -73,15 +73,14 @@ public class ExcelController {
     }
 
     @RequestMapping(value="/resultado", method= RequestMethod.GET)
-    public ModelAndView getPosts(){
+    public ModelAndView getPosts() throws Exception {
         ModelAndView mv = new ModelAndView("resultado");
         HeaderSaida saida = null;
         try {
             saida = excellService.extrairDados("1/16/2020");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
+            throw new Exception(e);
         }
         mv.addObject("resultado", saida);
         return mv;
