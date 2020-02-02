@@ -92,10 +92,6 @@ public class ExcelController {
             attributes.addFlashAttribute("mensagem", "Verifique se os campos obrigatórios foram preenchidos!");
             return "redirect:/novaExtracao";
         }
-
-        System.out.print(planilha.getData());
-//        System.out.println(file.getOriginalFilename());
-
         return "redirect:/resultado";
     }
 }
