@@ -1,8 +1,6 @@
 package com.spring.upload.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.persistence.Lob;
 import java.time.LocalDate;
 
 public class UploadPlanilha {

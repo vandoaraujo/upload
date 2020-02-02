@@ -4,6 +4,7 @@ import com.spring.upload.model.Demanda;
 import com.spring.upload.model.HeaderSaida;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +28,9 @@ public class ExcelLeitura {
 	public static HeaderSaida extrairDados() throws IOException, InvalidFormatException {
 
 		HeaderSaida saida = new HeaderSaida();
-		Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
+//		WorkbookFactory.create()
+		XSSFWorkbook workbook = new XSSFWorkbook(new File(SAMPLE_XLSX_FILE_PATH));
+//		Workbook workbook = WorkbookFactory.create();
 		String data = "1/16/20";
 		String hora = "07:00 X 16:00";
 		Sheet sheet = workbook.getSheetAt(0);
