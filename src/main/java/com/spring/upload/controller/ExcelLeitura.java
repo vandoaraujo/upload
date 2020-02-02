@@ -3,10 +3,12 @@ package com.spring.upload.controller;
 import com.spring.upload.model.Demanda;
 import com.spring.upload.model.HeaderSaida;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -28,9 +30,10 @@ public class ExcelLeitura {
 	public static HeaderSaida extrairDados() throws IOException, InvalidFormatException {
 
 		HeaderSaida saida = new HeaderSaida();
-//		WorkbookFactory.create()
-		XSSFWorkbook workbook = new XSSFWorkbook(new File(SAMPLE_XLSX_FILE_PATH));
-//		Workbook workbook = WorkbookFactory.create();
+//		WorkbookFactory.create()xx
+		File file = new File(SAMPLE_XLSX_FILE_PATH);
+		OPCPackage opcPackage = OPCPackage.open(file.getAbsolutePath());
+		XSSFWorkbook workbook = new XSSFWorkbook(opcPackage);
 		String data = "1/16/20";
 		String hora = "07:00 X 16:00";
 		Sheet sheet = workbook.getSheetAt(0);
