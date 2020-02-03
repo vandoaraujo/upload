@@ -52,7 +52,9 @@ public class ExcelController {
             Files.write(path, bytes);
 
             redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + file.getOriginalFilename() + "'");
+                    "Arquivo salvo com sucesso '" + file.getOriginalFilename() + "'");
+            redirectAttributes.addFlashAttribute("sucesso",
+                    true);
 
         } catch (IOException e) {
             e.printStackTrace();

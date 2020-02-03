@@ -27,15 +27,13 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb" style="background-color: white; padding-left: 0px;">
                 <li class="breadcrumb-item"><a href="/">Inicio</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Nova Extração</li>
+                <li class="breadcrumb-item active" aria-current="page">Selecione a data:</li>
             </ol>
         </nav>
         <div>
             <th:block th:include="mensagemValidacao"></th:block>
             <form method="post">
-                <div class="form-group">
-                    <input type="file" name="planilha" placeholder="Planilha *">
-                </div>
+
                 <div class="form-group">
                     <input type="date" class="form-control" name="data" placeholder="Data *">
                 </div>
