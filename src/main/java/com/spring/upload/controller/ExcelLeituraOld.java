@@ -2,7 +2,9 @@ package com.spring.upload.controller;
 
 import com.spring.upload.model.Demanda;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +26,11 @@ public class ExcelLeituraOld {
 	}
 
 	public static List<Demanda> extrairDados() throws IOException, InvalidFormatException {
-		Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
+		File file = new File(SAMPLE_XLSX_FILE_PATH);
+		OPCPackage opcPackage = OPCPackage.open(file.getAbsolutePath());
+		XSSFWorkbook workbook = new XSSFWorkbook(opcPackage);
+
+//		Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
 		String data = "1/16/20";
 		String hora = "07:00 X 16:00";
 		Sheet sheet = workbook.getSheetAt(0);

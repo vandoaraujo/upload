@@ -16,7 +16,7 @@ import java.util.*;
  */
 
 public class ExcelLeitura {
-	public static final String SAMPLE_XLSX_FILE_PATH = "Programacao.xlsx";
+	public static final String SAMPLE_XLSX_FILE_PATH = "./Programacao.xlsx";
 
 	static List<String> colunas = null;
 	static List<Map> valorContidoEmUmaLinha = new ArrayList<>();
