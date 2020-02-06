@@ -8,7 +8,10 @@ import com.spring.upload.model.Demanda;
 import com.spring.upload.model.HeaderSaida;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -21,7 +24,7 @@ import java.util.*;
 /**
  */
 
-public class ExcelLeitura {
+public class ExcelLeituraAntigaForma {
 	public static final String SAMPLE_XLSX_FILE_PATH = "./Programacao.xlsx";
 
 	static List<String> colunas = null;
@@ -80,7 +83,6 @@ public class ExcelLeitura {
 
 				@Override
 				public void endSheet() {
-
 					System.out.println("Processing completed for sheet number=" + sheetNumber);
 				}
 			};
@@ -106,13 +108,7 @@ public class ExcelLeitura {
 				// just ignore IO exception
 			}
 		}
-		HeaderSaida saida = new HeaderSaida();
-		saida.setTitulo("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
-		saida.setResumo("*RESUMO DIÁRIO DO ATENDIMENTO -" + null);
-		saida.setHora("");
-		saida.setAprovadas(null);
-		saida.setCanceladas(null);
-		return saida;
+		return new HeaderSaida();
 	}
 
 	public static HeaderSaida extrairDados2() throws IOException, InvalidFormatException {
