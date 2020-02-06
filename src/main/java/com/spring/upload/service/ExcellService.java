@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ExcellService {
 
-    public HeaderSaida extrairDados(String data) throws IOException, InvalidFormatException;
+    public HeaderSaida extrairDados(String data) throws Exception;
 }

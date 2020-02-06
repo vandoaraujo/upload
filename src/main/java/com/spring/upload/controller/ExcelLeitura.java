@@ -1,15 +1,21 @@
 package com.spring.upload.controller;
 
+import com.myjeejava.poi.ExcelReader;
+import com.myjeejava.poi.ExcelRowContentCallback;
+import com.myjeejava.poi.ExcelSheetCallback;
+import com.myjeejava.poi.ExcelWorkSheetRowCallbackHandler;
 import com.spring.upload.model.Demanda;
 import com.spring.upload.model.HeaderSaida;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -23,11 +29,90 @@ public class ExcelLeitura {
 	static List<Map> valorContidoEmUmaLinhaCancelados = new ArrayList<>();
 	static List<Row> linhasCanceladas = new ArrayList();
 
-	public static void main(String[] args) throws IOException, InvalidFormatException {
-		extrairDados();
+	public static void main(String[] args) throws Exception {
+
+//    String SAMPLE_PERSON_DATA_FILE_PATH = "src/test/resources/Sample-Person-Data.xlsx";
+
 	}
 
-	public static HeaderSaida extrairDados() throws IOException, InvalidFormatException {
+	public static HeaderSaida extrairDados() throws Exception {
+		String SAMPLE_PERSON_DATA_FILE_PATH = "src/test/resources/Programacao.xlsx";
+
+
+		File file = new File(SAMPLE_PERSON_DATA_FILE_PATH);
+		InputStream inputStream = new FileInputStream(file);
+
+		// The package open is instantaneous, as it should be.
+		OPCPackage pkg = null;
+		try {
+			ExcelWorkSheetRowCallbackHandler sheetRowCallbackHandler =
+					new ExcelWorkSheetRowCallbackHandler(new ExcelRowContentCallback() {
+
+						@Override
+						public void processRow(int rowNum, Map<String, String> map) {
+
+							// Do any custom row processing here, such as save
+							// to database
+							// Convert map values, as necessary, to dates or
+							// parse as currency, etc
+							System.out.println("rowNum=" + rowNum + ", map=" + map);
+
+						}
+
+					});
+
+			pkg = OPCPackage.open(inputStream);
+
+			ExcelSheetCallback sheetCallback = new ExcelSheetCallback() {
+				private int sheetNumber = 0;
+
+				@Override
+				public void startSheet(int sheetNum, String sheetName) {
+					this.sheetNumber = sheetNum;
+					System.out.println("Started processing sheet number=" + sheetNumber
+							+ " and Sheet Name is '" + sheetName + "'");
+				}
+
+				@Override
+				public void endSheet() {
+					System.out.println("Processing completed for sheet number=" + sheetNumber);
+				}
+			};
+
+
+			System.out.println("Constructor: pkg, sheetRowCallbackHandler, sheetCallback");
+			ExcelReader example1 = new ExcelReader(pkg, sheetRowCallbackHandler, sheetCallback);
+			example1.process();
+
+			System.out.println("\nConstructor: filePath, sheetRowCallbackHandler, sheetCallback");
+			ExcelReader example2 =
+					new ExcelReader(SAMPLE_PERSON_DATA_FILE_PATH, sheetRowCallbackHandler, sheetCallback);
+			example2.process();
+
+			System.out.println("\nConstructor: file, sheetRowCallbackHandler, sheetCallback");
+			ExcelReader example3 = new ExcelReader(file, sheetRowCallbackHandler, null);
+			example3.process();
+
+		} catch (RuntimeException are) {
+			System.out.println(are.getCause());
+		} catch (InvalidFormatException ife) {
+			System.out.println(ife.getCause());
+		} catch (IOException ioe) {
+			System.out.println(ioe.getCause());
+		} finally {
+			IOUtils.closeQuietly(inputStream);
+			try {
+				if (null != pkg) {
+					pkg.close();
+				}
+			} catch (IOException e) {
+				// just ignore IO exception
+			}
+		}
+		return new HeaderSaida();
+	}
+
+	public static HeaderSaida extrairDados2() throws IOException, InvalidFormatException {
 
 		HeaderSaida saida = new HeaderSaida();
 //		WorkbookFactory.create()xx
@@ -84,7 +169,7 @@ public class ExcelLeitura {
 		saida.setAprovadas(demandas);
 		saida.setCanceladas(demandasNaoAutorizadas);
 
-		workbook.close();
+//		workbook.;
 		return saida;
 	}
 

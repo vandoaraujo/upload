@@ -15,7 +15,7 @@ public class ExcellServiceImpl implements ExcellService {
 
 
     @Override
-    public HeaderSaida extrairDados(String data) throws IOException, InvalidFormatException {
+    public HeaderSaida extrairDados(String data) throws Exception {
         return ExcelLeitura.extrairDados();
     }
 }
