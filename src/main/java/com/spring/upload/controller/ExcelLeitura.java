@@ -84,15 +84,6 @@ public class ExcelLeitura {
 			ExcelReader example1 = new ExcelReader(pkg, sheetRowCallbackHandler, sheetCallback);
 			example1.process();
 
-			System.out.println("\nConstructor: filePath, sheetRowCallbackHandler, sheetCallback");
-			ExcelReader example2 =
-					new ExcelReader(SAMPLE_PERSON_DATA_FILE_PATH, sheetRowCallbackHandler, sheetCallback);
-			example2.process();
-
-			System.out.println("\nConstructor: file, sheetRowCallbackHandler, sheetCallback");
-			ExcelReader example3 = new ExcelReader(file, sheetRowCallbackHandler, null);
-			example3.process();
-
 		} catch (RuntimeException are) {
 			System.out.println(are.getCause());
 		} catch (InvalidFormatException ife) {
