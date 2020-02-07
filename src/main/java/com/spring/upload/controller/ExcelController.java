@@ -30,12 +30,12 @@ public class ExcelController {
     @Autowired
     ExcellService excellService;
 
-    @RequestMapping(value="/upload", method= RequestMethod.GET)
-    public String index(){
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public String index() {
         return "upload";
     }
 
-    @PostMapping("/upload") // //new annotation since 4.3
+    @PostMapping("/upload")
     public String singleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
 
@@ -57,6 +57,12 @@ public class ExcelController {
                     true);
 
         } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Ocorreu um erro ao efetuar o upload do arquivo " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Ocorreu um erro ao efetuar o upload do arquivo " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -69,12 +75,12 @@ public class ExcelController {
     }
 
 
-    @RequestMapping(value="/novaExtracao", method=RequestMethod.GET)
-    public String getUploadForm(){
+    @RequestMapping(value = "/novaExtracao", method = RequestMethod.GET)
+    public String getUploadForm() {
         return "novaExtracao";
     }
 
-    @RequestMapping(value="/resultado", method= RequestMethod.GET)
+    @RequestMapping(value = "/resultado", method = RequestMethod.GET)
     public ModelAndView getPosts() throws Exception {
         ModelAndView mv = new ModelAndView("resultado");
         HeaderSaida saida = null;
@@ -88,9 +94,9 @@ public class ExcelController {
         return mv;
     }
 
-    @RequestMapping(value="/novaExtracao", method=RequestMethod.POST)
-    public String savePost(@Valid UploadPlanilha planilha, BindingResult result, RedirectAttributes attributes){
-        if(result.hasErrors()){
+    @RequestMapping(value = "/novaExtracao", method = RequestMethod.POST)
+    public String savePost(@Valid UploadPlanilha planilha, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
             attributes.addFlashAttribute("mensagem", "Verifique se os campos obrigatórios foram preenchidos!");
             return "redirect:/novaExtracao";
         }

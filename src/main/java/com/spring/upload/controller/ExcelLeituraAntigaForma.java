@@ -180,13 +180,13 @@ public class ExcelLeituraAntigaForma {
 			demandaNA.setTitulo("SETD ");
 
 			Optional<String> titulo = imprimeValores(colunas, "Subestação DTR-SE", row);
-			demandaNA.setTitulo(demandaNA.getTitulo().concat(String.valueOf(titulo.get())).concat(" "));
+			demandaNA.setTitulo(demandaNA.getTitulo().concat(titulo.get()).concat(" "));
 
 			Optional<String> po =  imprimeValores(colunas, "PO", row);
-			demandaNA.setTitulo(demandaNA.getTitulo().concat(String.valueOf(po.get())).concat(" "));
+			demandaNA.setTitulo(demandaNA.getTitulo().concat(po.get()).concat(" "));
 
 			Optional<String> causa = imprimeValores(colunas, "Causa/Serviço", row);
-			demandaNA.setTitulo(demandaNA.getTitulo().concat(String.valueOf(causa.get())).concat(" "));
+			demandaNA.setTitulo(demandaNA.getTitulo().concat(causa.get()).concat(" "));
 			demandaNA.setStatus("Status: ");
 			demandasNaoAutorizadas.add(demandaNA);
 		}
@@ -205,19 +205,19 @@ public class ExcelLeituraAntigaForma {
 			Demanda demanda = new Demanda();
 			demanda.setTitulo("SETD ");
 			Optional<String> titulo = imprimeValores(colunas, "Subestação DTR-SE", row);
-			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(titulo.get())).concat(" "));
+			demanda.setTitulo(demanda.getTitulo().concat(titulo.get()).concat(" "));
 
 			Optional<String> tituloEq = imprimeValores(colunas, "Equipamento", row);
-			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(tituloEq.get())).concat(" "));
+			demanda.setTitulo(demanda.getTitulo().concat(tituloEq.get()).concat(" "));
 
 			Optional<String> tipoEq = imprimeValores(colunas, "Tipo de Equipamento", row);
-			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(tipoEq.get())).concat(" "));
+			demanda.setTitulo(demanda.getTitulo().concat(tipoEq.get()).concat(" "));
 
 			Optional<String> po = imprimeValores(colunas, "PO", row);
-			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(po.get())).concat(" "));
+			demanda.setTitulo(demanda.getTitulo().concat(po.get()).concat(" "));
 
 			Optional<String> causaServico = imprimeValores(colunas, "Causa/Serviço", row);
-			demanda.setTitulo(demanda.getTitulo().concat(String.valueOf(causaServico.get())));
+			demanda.setTitulo(demanda.getTitulo().concat(causaServico.get()));
 
 			demanda.setEquipe("Equipe: ");
 			String valor = buscaColaborador(colunas, "Colaborador 1 - DTR-SE", row);
@@ -242,7 +242,7 @@ public class ExcelLeituraAntigaForma {
 
 			demanda.setViatura("Viatura: ");
 			Optional<String> viatura = imprimeValores(colunas, "Viatura 1 - DTR-SE", row);
-			demanda.setViatura(demanda.getViatura().concat(String.valueOf(viatura.get())));
+			demanda.setViatura(demanda.getViatura().concat(viatura.get()));
 			demanda.setHorarioSaida("Horário de Saída: ");
 			demanda.setStatus("Status: ");
 			demanda.setJustificativa("Justificativa: ");
@@ -295,10 +295,7 @@ public class ExcelLeituraAntigaForma {
 		while (cellIterator.hasNext()) {
 			Cell cell = cellIterator.next();
 			String cellValue = new DataFormatter().formatCellValue(cell);
-			if (!cellValue.equals("") && (cellValue.equals(data))) {
-				return true;
-			}
-			return false;
+			return !cellValue.equals("") && (cellValue.equals(data));
 		}
 		return false;
 	}
