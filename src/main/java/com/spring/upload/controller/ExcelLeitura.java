@@ -24,7 +24,7 @@ public class ExcelLeitura {
     static String data = "1/16/20";
 
     public static HeaderSaida extrairDados() throws Exception {
-        String SAMPLE_PERSON_DATA_FILE_PATH = "src/test/resources/Programacao.xlsx";
+        String SAMPLE_PERSON_DATA_FILE_PATH = "app/Programacao.xlsx";
         File file = new File(SAMPLE_PERSON_DATA_FILE_PATH);
         InputStream inputStream = new FileInputStream(file);
         OPCPackage pkg = null;
