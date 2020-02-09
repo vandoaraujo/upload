@@ -17,12 +17,4 @@ public class GlobalExceptionHandler {
         return "redirect:/uploadStatus";
 
     }
-
-    /*@ExceptionHandler(MultipartException.class)
-    public String handleError2(MultipartException e) {
-
-        return "redirect:/errorPage";
-
-    }*/
-
 }

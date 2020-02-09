@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -103,11 +107,18 @@ public class ExcelController {
             return "redirect:/novaExtracao";
         }
 
+        if(planilha.getData().equals("")){
+            attributes.addFlashAttribute("mensagem",
+                    "Favor preencher a data!");
+            return "redirect:/novaExtracao";
+        }
+
         try {
             saida = excellService.extrairDados(planilha.getData());
             if(saida.getAprovadas().isEmpty() && saida.getCanceladas().isEmpty()){
+                String dataFinal = formatarDataSaida(planilha.getData());
                 attributes.addFlashAttribute("mensagem",
-                        "Não foram encontrados dados referente a esse dia:  " + planilha.getData());
+                        "Não foram encontrados dados referente a esse dia:  " + dataFinal);
                 return "redirect:/novaExtracao";
             }
         } catch (Exception e) {
@@ -117,5 +128,24 @@ public class ExcelController {
         }
 
         return "redirect:/resultado";
+    }
+
+    public static String formatarDataSaida(String dataEntrada) {
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder dataFormatada = new StringBuilder();
+        try {
+            Date dataUtil = date.parse(dataEntrada);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dataUtil);
+            int mes = calendar.get(Calendar.MONTH) + 1;
+            dataFormatada.append(calendar.get(Calendar.DAY_OF_MONTH))
+                    .append("/")
+                    .append(mes)
+                    .append("/")
+                    .append(calendar.get(Calendar.YEAR));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dataFormatada.toString();
     }
 }

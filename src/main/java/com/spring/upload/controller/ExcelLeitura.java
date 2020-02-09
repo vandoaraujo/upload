@@ -116,7 +116,7 @@ public class ExcelLeitura {
         return dataFormatada.toString();
     }
 
-    private static String formatarDataSaida(String dataEntrada) {
+    public static String formatarDataSaida(String dataEntrada) {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder dataFormatada = new StringBuilder();
         try {
