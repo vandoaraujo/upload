@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -92,8 +93,9 @@ public class ExcelLeitura {
 
     private static HeaderSaida getHeaderSaida(String dataInvertida, List<Demanda> demandas, List<Demanda> demandasNaoAutorizadas) {
         HeaderSaida saida = new HeaderSaida();
+        String dataSaida = formatarDataSaida(dataInvertida);
         saida.setTitulo("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
-        saida.setResumo("*RESUMO DIÁRIO DO ATENDIMENTO -" + dataInvertida);
+        saida.setResumo("*RESUMO DIÁRIO DO ATENDIMENTO -" + dataSaida + "*");
         saida.setHora(hora);
         saida.setAprovadas(demandas);
         saida.setCanceladas(demandasNaoAutorizadas);
@@ -111,6 +113,25 @@ public class ExcelLeitura {
         .append(calendar.get(Calendar.DAY_OF_MONTH))
         .append("/")
         .append(anoDoisDigitos.substring(2));
+        return dataFormatada.toString();
+    }
+
+    private static String formatarDataSaida(String dataEntrada) {
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder dataFormatada = new StringBuilder();
+        try {
+            Date dataUtil = date.parse(dataEntrada);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dataUtil);
+            int mes = calendar.get(Calendar.MONTH) + 1;
+            dataFormatada.append(calendar.get(Calendar.DAY_OF_MONTH))
+                    .append("/")
+                    .append(mes)
+                    .append("/")
+                    .append(calendar.get(Calendar.YEAR));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return dataFormatada.toString();
     }
 
