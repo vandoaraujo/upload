@@ -11,10 +11,10 @@
 <body>
 
     <header>
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-dark bg-primary">
             <span class="navbar-brand mb-0 h1" style="font-weight: bold;">Extração de Dados</span>
+            <a href="/novaExtracao" class="btn btn-light" role="button">Nova Extração</a>
             <h4 th:inline="text">Olá [[${#httpServletRequest.remoteUser}]]!</h4>
-            <a href="/novaExtracao" class="btn btn-primary" role="button">Nova Extração</a>
             <form th:action="@{/logout}" method="post">
                 <input type="submit" value="Sign Out"/>
             </form>
@@ -22,7 +22,6 @@
     </header>
     <section>
         <div class="container"  style="width: 60%; padding-bottom: 30px;">
-<!--            <span th:text="${resultado.titulo}"></span>-->
             <p></p>
             <span th:text="${resultado.resumo}"></span>
             <p></p>

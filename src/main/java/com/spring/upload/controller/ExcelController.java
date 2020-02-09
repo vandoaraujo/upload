@@ -46,6 +46,11 @@ public class ExcelController {
             return "redirect:uploadStatus";
         }
 
+        if(!file.getOriginalFilename().equals("Programação.xlsx")){
+            redirectAttributes.addFlashAttribute("message", "O nome do arquivo precisa ser Programação");
+            return "redirect:uploadStatus";
+        }
+
         try {
 
             // Get the file and save it somewhere
@@ -93,14 +98,16 @@ public class ExcelController {
     @RequestMapping(value = "/novaExtracao", method = RequestMethod.POST)
     public String savePost(@Valid UploadPlanilha planilha, BindingResult result, RedirectAttributes attributes) throws Exception {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute("mensagem", "Verifique se os campos obrigatórios foram preenchidos!");
+            attributes.addFlashAttribute("mensagem",
+                    "Verifique se os campos obrigatórios foram preenchidos!");
             return "redirect:/novaExtracao";
         }
 
         try {
             saida = excellService.extrairDados(planilha.getData());
             if(saida.getAprovadas().isEmpty() && saida.getCanceladas().isEmpty()){
-                attributes.addFlashAttribute("mensagem", "Não foram encontrados dados referente a esse dia:  " + planilha.getData());
+                attributes.addFlashAttribute("mensagem",
+                        "Não foram encontrados dados referente a esse dia:  " + planilha.getData());
                 return "redirect:/novaExtracao";
             }
         } catch (Exception e) {
