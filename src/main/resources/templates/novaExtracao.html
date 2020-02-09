@@ -16,11 +16,11 @@
 </head>
 <body>
 
-    <header>
-        <nav class="navbar navbar-light bg-light">
-            <span class="navbar-brand mb-0 h1" style="font-weight: bold;">Extração de Dados</span>
-        </nav>
-    </header>
+<header>
+    <nav class="navbar navbar-dark bg-primary">
+        <span class="navbar-brand mb-0 h1" style="font-weight: bold;">Extração de Dados </span>
+    </nav>
+</header>
 
     <section>
     <div class="container"  style="width: 70%;">
@@ -34,12 +34,15 @@
             <th:block th:include="mensagemValidacao"></th:block>
             <form method="post">
 
-            <div class="form-group">
-               <input type="date" class="form-control" name="data" placeholder="Data *">
-            </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="dataSelecao">Data: </label>
+                        <input type="date" class="form-control" name="data" id="dataSelecao" placeholder="Data *">
+                    </div>
+                </div>
 
             <small class="form-text text-muted">(*) Campos obrigatórios</small>
-            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Extrair Dados</button>
+            <button type="submit" class="btn btn-primary" >Extrair Dados</button>
 
             </form>
         </div>

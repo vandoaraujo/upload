@@ -13,7 +13,7 @@
     <header>
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-brand mb-0 h1" style="font-weight: bold;">Extração de Dados</span>
-            <h1 th:inline="text">Olá [[${#httpServletRequest.remoteUser}]]!</h1>
+            <h4 th:inline="text">Olá [[${#httpServletRequest.remoteUser}]]!</h4>
             <a href="/novaExtracao" class="btn btn-primary" role="button">Nova Extração</a>
             <form th:action="@{/logout}" method="post">
                 <input type="submit" value="Sign Out"/>

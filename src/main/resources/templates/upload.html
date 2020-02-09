@@ -18,14 +18,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<header>
+    <nav class="navbar navbar-dark bg-primary">
+        <span class="navbar-brand mb-0 h1" style="font-weight: bold;">Extração de Dados </span>
+    </nav>
+</header>
+
 <section>
     <div class="container"  style="width: 70%;">
 
-    <h4>Efetue o upload do arquivo no botão abaixo com o nome <strong>Programacao</strong> e formato <strong>xlsx</strong> :</h4>
+    <p></p>
+    <p>Efetue o upload do arquivo no botão abaixo com o nome <strong>Programação</strong> e formato <strong>xlsx</strong> :</p>
 
     <form method="POST" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="file" /><br/><br/>
-        <input type="submit" value="Submit" />
+<!--        <input type="file" name="file" /><br/><br/>-->
+<!--        <input type="submit" value="Submit" />-->
+
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Entrada da planilha</label>
+            <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
+            <input type="submit" value="Submit" />
+        </div>
+
     </form>
     </div>
 </section>
