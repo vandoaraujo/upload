@@ -18,12 +18,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<h3>Efetue o upload do arquivo no botão abaixo com o nome Programacao e formato xlsx:</h3>
+<section>
+    <div class="container"  style="width: 70%;">
 
-<form method="POST" action="/upload" enctype="multipart/form-data">
-    <input type="file" name="file" /><br/><br/>
-    <input type="submit" value="Submit" />
-</form>
+    <h4>Efetue o upload do arquivo no botão abaixo com o nome <strong>Programacao</strong> e formato <strong>xlsx</strong> :</h4>
+
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="file" /><br/><br/>
+        <input type="submit" value="Submit" />
+    </form>
+    </div>
+</section>
 
 </body>
 </html>

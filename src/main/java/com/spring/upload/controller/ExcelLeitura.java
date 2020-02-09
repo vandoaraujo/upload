@@ -14,16 +14,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SuppressWarnings("ALL")
 public class ExcelLeitura {
-    static List<Map> valorContidoEmUmaLinha = new ArrayList<>();
-    static List<Map> valorContidoEmUmaLinhaCancelados = new ArrayList<>();
+    static List<Map> valorContidoEmUmaLinha = null;
+    static List<Map> valorContidoEmUmaLinhaCancelados = null;
     static String hora = "07:00 X 16:00";
-    static String data = "1/16/20";
+    static String data = "";
 
-    public static HeaderSaida extrairDados() throws Exception {
+    public static HeaderSaida extrairDados(String dataInvertida) throws Exception {
+        valorContidoEmUmaLinha = new ArrayList();
+        valorContidoEmUmaLinhaCancelados = new ArrayList();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        Date dataUtil = date.parse(dataInvertida);
+        data = filtrarDataConsulta(dataUtil);
         String SAMPLE_PERSON_DATA_FILE_PATH = "./Programacao.xlsx";
         File file = new File(SAMPLE_PERSON_DATA_FILE_PATH);
         InputStream inputStream = new FileInputStream(file);
@@ -46,7 +53,6 @@ public class ExcelLeitura {
                     });
 
             pkg = OPCPackage.open(inputStream);
-
             ExcelSheetCallback sheetCallback = new ExcelSheetCallback() {
                 private int sheetNumber = 0;
 
@@ -63,7 +69,6 @@ public class ExcelLeitura {
                 }
             };
 
-            System.out.println("Constructor: pkg, sheetRowCallbackHandler, sheetCallback");
             ExcelReader example1 = new ExcelReader(pkg, sheetRowCallbackHandler, sheetCallback);
             example1.process();
 
@@ -82,19 +87,35 @@ public class ExcelLeitura {
 
         List<Demanda> demandas = formataSaidaDemandasRealizadas(data, hora);
         List<Demanda> demandasNaoAutorizadas = montaLayoutDemandasNaoAutorizadasCanceladas();
+        return getHeaderSaida(dataInvertida, demandas, demandasNaoAutorizadas);
+    }
 
+    private static HeaderSaida getHeaderSaida(String dataInvertida, List<Demanda> demandas, List<Demanda> demandasNaoAutorizadas) {
         HeaderSaida saida = new HeaderSaida();
         saida.setTitulo("*MANUTENÇÃO E OPERAÇÃO DTR-SE*");
-        saida.setResumo("*RESUMO DIÁRIO DO ATENDIMENTO -" + data);
+        saida.setResumo("*RESUMO DIÁRIO DO ATENDIMENTO -" + dataInvertida);
         saida.setHora(hora);
         saida.setAprovadas(demandas);
         saida.setCanceladas(demandasNaoAutorizadas);
         return saida;
     }
 
+    private static String filtrarDataConsulta(Date dataUtil) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dataUtil);
+        StringBuilder dataFormatada = new StringBuilder();
+        int mes = calendar.get(Calendar.MONTH) + 1;
+        String anoDoisDigitos = String.valueOf(calendar.get(Calendar.YEAR));
+        dataFormatada.append(mes)
+        .append("/")
+        .append(calendar.get(Calendar.DAY_OF_MONTH))
+        .append("/")
+        .append(anoDoisDigitos.substring(2));
+        return dataFormatada.toString();
+    }
+
     private static List<Demanda> montaLayoutDemandasNaoAutorizadasCanceladas() {
         List<Demanda> demandasNaoAutorizadas = new ArrayList();
-        /*System.out.println("SERVIÇOS NÃO AUTORIZADOS OU CANCELADOS");*/
         for (Map row : valorContidoEmUmaLinhaCancelados) {
             Demanda demandaNA = new Demanda();
             demandaNA.setTitulo("SETD ");
@@ -117,9 +138,7 @@ public class ExcelLeitura {
      * @param colunas
      */
     private static List<Demanda> formataSaidaDemandasRealizadas(String data, String hora) {
-
         List<Demanda> demandas = new ArrayList();
-
         for (Map row : valorContidoEmUmaLinha) {
             Demanda demanda = new Demanda();
             demanda.setTitulo("SETD ");

@@ -30,6 +30,8 @@ public class ExcelController {
     @Autowired
     ExcellService excellService;
 
+    HeaderSaida saida;
+
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public String index() {
         return "upload";
@@ -81,25 +83,32 @@ public class ExcelController {
     }
 
     @RequestMapping(value = "/resultado", method = RequestMethod.GET)
-    public ModelAndView getPosts() throws Exception {
+    public ModelAndView getPosts() {
         ModelAndView mv = new ModelAndView("resultado");
-        HeaderSaida saida = null;
-        try {
-            saida = excellService.extrairDados("1/16/2020");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e);
-        }
         mv.addObject("resultado", saida);
+
         return mv;
     }
 
     @RequestMapping(value = "/novaExtracao", method = RequestMethod.POST)
-    public String savePost(@Valid UploadPlanilha planilha, BindingResult result, RedirectAttributes attributes) {
+    public String savePost(@Valid UploadPlanilha planilha, BindingResult result, RedirectAttributes attributes) throws Exception {
         if (result.hasErrors()) {
             attributes.addFlashAttribute("mensagem", "Verifique se os campos obrigatórios foram preenchidos!");
             return "redirect:/novaExtracao";
         }
+
+        try {
+            saida = excellService.extrairDados(planilha.getData());
+            if(saida.getAprovadas().isEmpty() && saida.getCanceladas().isEmpty()){
+                attributes.addFlashAttribute("mensagem", "Não foram encontrados dados referente a esse dia:  " + planilha.getData());
+                return "redirect:/novaExtracao";
+            }
+        } catch (Exception e) {
+            saida = null;
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+
         return "redirect:/resultado";
     }
 }

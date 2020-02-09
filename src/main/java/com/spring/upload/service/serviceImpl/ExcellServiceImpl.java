@@ -8,6 +8,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,6 +17,6 @@ public class ExcellServiceImpl implements ExcellService {
 
     @Override
     public HeaderSaida extrairDados(String data) throws Exception {
-        return ExcelLeitura.extrairDados();
+        return ExcelLeitura.extrairDados(data);
     }
 }
