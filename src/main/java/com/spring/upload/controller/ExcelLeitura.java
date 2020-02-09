@@ -32,7 +32,7 @@ public class ExcelLeitura {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         Date dataUtil = date.parse(dataInvertida);
         data = filtrarDataConsulta(dataUtil);
-        String SAMPLE_PERSON_DATA_FILE_PATH = "./Programação.xlsx";
+        String SAMPLE_PERSON_DATA_FILE_PATH = "./planilha.xlsx";
         File file = new File(SAMPLE_PERSON_DATA_FILE_PATH);
         InputStream inputStream = new FileInputStream(file);
         OPCPackage pkg = null;

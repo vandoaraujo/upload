@@ -50,8 +50,8 @@ public class ExcelController {
             return "redirect:uploadStatus";
         }
 
-        if(!file.getOriginalFilename().equals("Programação.xlsx")){
-            redirectAttributes.addFlashAttribute("message", "O nome do arquivo precisa ser Programação");
+        if(!file.getOriginalFilename().equals("planilha.xlsx")){
+            redirectAttributes.addFlashAttribute("message", "O nome do arquivo deve ser planilha");
             return "redirect:uploadStatus";
         }
 
