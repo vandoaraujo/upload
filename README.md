@@ -1,5 +1,3 @@
-# upload
+# upload de planilha excel e extração de dados.
 
-Projeto desenvolvido no curso de SpringBoot, SpringMVC e Thymeleaf.
-
-Upload na AWS ou Heroku.
+Projeto desenvolvido usando SpringBoot, SpringMVC e Thymeleaf. Upload no Heroku. Utiliza a API Excel Reader.
